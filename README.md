@@ -34,6 +34,8 @@ This is a proof-of-concept for **openPIP 2.0**, a complete modernization of the 
 
 ### Frontend (React)
 - **Real-time Search**: Instant protein search as you type
+- **Interactive Detail View**: Click any protein row to see full details in a modal
+- **External Links**: Direct links to UniProt, Ensembl, and NCBI databases
 - **Clean UI**: Professional, minimal design with Material-UI
 - **TypeScript**: Full type safety for better code quality
 - **Responsive**: Works on desktop and mobile
@@ -271,6 +273,8 @@ Load with: `python manage.py load_sample_proteins`
 - [x] Real-time search interface
 - [x] Type-safe API client
 - [x] Protein results table
+- [x] **Protein detail modal** - Click-to-view full details
+- [x] External database links (UniProt, Ensembl, NCBI)
 - [x] Error handling and loading states
 - [x] Professional, minimal UI design
 
@@ -279,7 +283,6 @@ Load with: `python manage.py load_sample_proteins`
 ### 🚧 Planned Enhancements (Next Iterations)
 
 **Frontend Features:**
-- [ ] **Protein detail modal** - Click protein row to see full details
 - [ ] **Network visualization** - Cytoscape.js for interaction networks
 - [ ] **Advanced filters** - Filter by organism, interaction count, etc.
 - [ ] **Sorting controls** - Sort by gene name, date, relevance
