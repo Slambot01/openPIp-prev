@@ -313,7 +313,7 @@ Load with: `python manage.py load_sample_proteins`
 
 ## 👨‍💻 Author
 
-**[Your Name]**
+**Ritesh Pandit**
 - GitHub: [@Slambot01](https://github.com/Slambot01)
 - Built for: GSoC 2026 - openPIP 2.0 Rewrite
 
@@ -333,4 +333,4 @@ This project is part of the openPIP ecosystem. See the main [openPIP repository]
 
 ---
 
-**⭐ If this POC demonstrates the technical capability for openPIP 2.0, please star the repo!**
+
