@@ -71,6 +71,36 @@ This is a proof-of-concept for **openPIP 2.0**, a complete modernization of the 
 
 ## 🏃 Quick Start
 
+### 🐳 Docker (Recommended - One Command!)
+
+**Prerequisites:**
+- Docker Desktop installed and running
+
+```bash
+# Clone the repository
+git clone https://github.com/Slambot01/openPIp-prev.git
+cd openPIp-prev
+
+# Start everything with one command
+docker-compose up --build
+
+# Access the application:
+# - Frontend: http://localhost:3000
+# - Backend API: http://localhost:8000/api/proteins/
+```
+
+That's it! Docker will automatically:
+- Build backend and frontend containers
+- Run database migrations
+- Load sample protein data
+- Start both servers
+
+To stop: `Ctrl+C` and then `docker-compose down`
+
+---
+
+### 💻 Manual Setup (Without Docker)
+
 ### Prerequisites
 - Python 3.13+
 - Node.js 18+
@@ -265,6 +295,7 @@ Load with: `python manage.py load_sample_proteins`
 - [x] Django admin panel
 - [x] CORS configuration
 - [x] Sample data loader
+- [x] **Dockerfile for containerization**
 
 **Frontend:**
 - [x] React 18 + TypeScript + Vite setup
@@ -276,6 +307,12 @@ Load with: `python manage.py load_sample_proteins`
 - [x] External database links (UniProt, Ensembl, NCBI)
 - [x] Error handling and loading states
 - [x] Professional, minimal UI design
+- [x] **Dockerfile + nginx for production**
+
+**DevOps:**
+- [x] **Docker Compose** - One-command deployment
+- [x] **Automated setup** - Migrations + data loading
+- [x] **Production-ready** - Multi-stage builds
 
 ---
 
@@ -303,7 +340,6 @@ Load with: `python manage.py load_sample_proteins`
 - [ ] **Full-text search** - PostgreSQL full-text or Elasticsearch
 
 **DevOps & Infrastructure:**
-- [ ] **Docker Compose** - One-command deployment
 - [ ] **CI/CD pipeline** - GitHub Actions for testing/deployment
 - [ ] **Unit tests** - Backend and frontend test coverage
 - [ ] **Integration tests** - End-to-end testing
