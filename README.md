@@ -44,10 +44,9 @@ This is a proof-of-concept for **openPIP 2.0**, a complete modernization of the 
 ## 📸 Screenshots
 
 ### Search Interface
-![Search Interface](docs/screenshots/search.png)
-
-### Protein Results
-![Results Table](docs/screenshots/results.png)
+<img width="1913" height="863" alt="image" src="https://github.com/user-attachments/assets/cdf69d3c-9ee0-4f97-a0de-cf4b1bd718ff" />
+<img width="1917" height="871" alt="image" src="https://github.com/user-attachments/assets/53da13a8-6f23-4bdf-99e9-a8cdbfad0652" />
+<img width="1898" height="868" alt="image" src="https://github.com/user-attachments/assets/106ac11a-808c-4991-81e8-2883ea78b0a6" />
 
 ---
 
@@ -332,5 +331,6 @@ This project is part of the openPIP ecosystem. See the main [openPIP repository]
 - GSoC Program
 
 ---
+
 
 
