@@ -27,18 +27,23 @@ This is a proof-of-concept for **openPIP 2.0**, a complete modernization of the 
 
 ### Backend (Django)
 - **Protein Data Model**: Gene names, UniProt IDs, Ensembl IDs, Entrez IDs, descriptions, sequences
-- **REST API**: Full CRUD operations with search and filtering
+- **Interaction Model**: Protein-protein interactions with score, type (physical/genetic/regulatory), and dataset
+- **REST API**: Full CRUD for proteins, read-only interactions API with `?protein=` filter
+- **File Upload API**: `POST /api/upload/` — parses CSV and PSI-MI TAB (TSV) files via pandas
 - **Search Functionality**: Multi-field search across protein attributes
-- **Admin Panel**: Django admin for easy data management
+- **Admin Panel**: Django admin for proteins and interactions
 - **CORS Enabled**: Ready for frontend integration
 
 ### Frontend (React)
 - **Real-time Search**: Instant protein search as you type
 - **Interactive Detail View**: Click any protein row to see full details in a modal
 - **External Links**: Direct links to UniProt, Ensembl, and NCBI databases
-- **Clean UI**: Professional, minimal design with Material-UI
+- **🕸️ Network Visualization**: Cytoscape.js interactive graph — search a protein to see its PPI network
+- **Layout Toggle**: Switch between CoSE and Circle graph layouts
+- **📤 File Upload**: Drag-and-drop CSV/TSV upload with row-by-row validation and error reporting
+- **📥 Export PNG**: Download the network graph as a high-resolution PNG image
+- **Navigation**: Multi-page app with Proteins | Network | Upload nav bar
 - **TypeScript**: Full type safety for better code quality
-- **Responsive**: Works on desktop and mobile
 - **Error Handling**: Graceful error states and loading indicators
 
 ---
@@ -55,20 +60,19 @@ This is a proof-of-concept for **openPIP 2.0**, a complete modernization of the 
 
 ## 🛠️ Tech Stack
 
-### Backend
-- **Framework**: Django 6.0.2
-- **API**: Django REST Framework 3.16
-- **Database**: SQLite (easily upgradable to PostgreSQL)
-- **CORS**: django-cors-headers
+### Tech Stack
 
-### Frontend
-- **Framework**: React 18
-- **Language**: TypeScript 5.9
-- **UI Library**: Material-UI 7.0
-- **HTTP Client**: Axios
-- **Build Tool**: Vite 7.3
+| Layer | Technology |
+|-------|------------|
+| Backend | Django 6.0.2 + Django REST Framework 3.16 |
+| Frontend | React 18 + TypeScript 5.9 + Vite 7.3 |
+| UI | Material-UI 7.0 |
+| Graph | Cytoscape.js |
+| Upload | react-dropzone + pandas |
+| Routing | react-router-dom |
+| Database | SQLite (upgradable to PostgreSQL) |
+| DevOps | Docker + nginx |
 
----
 
 ## 🏃 Quick Start
 
@@ -156,50 +160,31 @@ Frontend will be running at: **http://localhost:5173**
 
 ## 📡 API Endpoints
 
-### List/Search Proteins
-```
-GET /api/proteins/
-GET /api/proteins/?search=TP53
-```
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/proteins/` | List all proteins |
+| GET | `/api/proteins/?search=TP53` | Search proteins |
+| GET | `/api/proteins/{id}/` | Get single protein |
+| GET | `/api/interactions/` | List all interactions |
+| GET | `/api/interactions/?protein=TP53` | Get interactions for a protein |
+| POST | `/api/upload/` | Upload CSV/TSV file of interactions |
 
-**Response:**
+### Example: Get TP53 interactions
+```bash
+curl http://127.0.0.1:8000/api/interactions/?protein=TP53
+```
 ```json
 {
-  "count": 5,
-  "next": null,
-  "previous": null,
   "results": [
     {
       "id": 1,
-      "gene_name": "TP53",
-      "protein_name": "Cellular tumor antigen p53",
-      "uniprot_id": "P04637",
-      "ensembl_id": "ENSG00000141510",
-      "entrez_id": "7157",
-      "description": "Acts as a tumor suppressor in many tumor types",
-      "sequence": "",
-      "created_at": "2026-02-13T12:00:00Z",
-      "updated_at": "2026-02-13T12:00:00Z"
+      "protein_a": { "gene_name": "TP53", "uniprot_id": "P04637" },
+      "protein_b": { "gene_name": "MDM2", "uniprot_id": "Q00987" },
+      "score": 0.99,
+      "interaction_type": "physical",
+      "dataset": "STRING"
     }
   ]
-}
-```
-
-### Get Single Protein
-```
-GET /api/proteins/{id}/
-```
-
-### Create Protein
-```
-POST /api/proteins/
-Content-Type: application/json
-
-{
-  "gene_name": "EGFR",
-  "protein_name": "Epidermal growth factor receptor",
-  "uniprot_id": "P00533",
-  "description": "Receptor tyrosine kinase"
 }
 ```
 
@@ -212,18 +197,21 @@ openpip-2.0-preview/
 ├── backend/
 │   ├── openpip/              # Django project settings
 │   ├── proteins/             # Proteins Django app
-│   │   ├── models.py         # Protein data model
-│   │   ├── serializers.py    # DRF serializers
-│   │   ├── views.py          # API endpoints
+│   │   ├── models.py         # Protein + Interaction models
+│   │   ├── serializers.py    # DRF serializers (nested)
+│   │   ├── views.py          # API views + UploadView
 │   │   ├── urls.py           # URL routing
-│   │   └── management/       # Custom commands
+│   │   └── management/       # load_sample_proteins command
 │   ├── manage.py
 │   └── requirements.txt
 │
 └── frontend/
     ├── src/
-    │   ├── api/              # API client
-    │   ├── App.tsx           # Main component
+    │   ├── api/              # proteinApi.ts (typed API client)
+    │   ├── pages/
+    │   │   ├── NetworkPage.tsx  # Cytoscape.js visualization
+    │   │   └── UploadPage.tsx   # Drag-and-drop upload
+    │   ├── App.tsx           # Nav bar + routing
     │   └── main.tsx          # Entry point
     ├── package.json
     └── vite.config.ts
@@ -273,80 +261,65 @@ curl http://127.0.0.1:8000/api/proteins/?search=TP53
 
 ## 📝 Sample Data
 
-The POC includes 5 sample proteins:
-- **TP53** - Cellular tumor antigen p53
-- **BRCA1** - Breast cancer type 1 susceptibility protein
-- **EGFR** - Epidermal growth factor receptor
-- **MYC** - Myc proto-oncogene protein
-- **KRAS** - GTPase KRas
+The POC includes **7 proteins** and **10 real PPI interactions**:
+
+**Proteins:** TP53, BRCA1, EGFR, MYC, KRAS, MDM2, BARD1
+
+**Interactions (from STRING/BioGRID):**
+| Protein A | Protein B | Score | Type |
+|-----------|-----------|-------|------|
+| TP53 | MDM2 | 0.99 | physical |
+| BRCA1 | BARD1 | 0.98 | physical |
+| KRAS | EGFR | 0.88 | physical |
+| TP53 | BRCA1 | 0.87 | physical |
+| TP53 | EGFR | 0.75 | regulatory |
+| BARD1 | TP53 | 0.70 | physical |
+| EGFR | MYC | 0.72 | regulatory |
+| MYC | KRAS | 0.65 | genetic |
+| MYC | BRCA1 | 0.60 | genetic |
+| MDM2 | KRAS | 0.55 | predicted |
 
 Load with: `python manage.py load_sample_proteins`
 
 ---
 
-## 🔮 Roadmap & Planned Features
+## 🔮 Roadmap
 
-### ✅ Completed (POC - Day 1 & 2)
+### ✅ Completed (POC)
 
 **Backend:**
 - [x] Django 6.0 + REST Framework setup
-- [x] Protein data model with full schema
-- [x] RESTful API with CRUD operations
-- [x] Multi-field search functionality
-- [x] Django admin panel
-- [x] CORS configuration
-- [x] Sample data loader
-- [x] **Dockerfile for containerization**
+- [x] Protein + Interaction data models
+- [x] RESTful API with CRUD + interaction filtering
+- [x] File upload endpoint (CSV + PSI-MI TAB via pandas)
+- [x] Multi-field search
+- [x] Django admin for proteins and interactions
+- [x] Sample data: 7 proteins + 10 PPI pairs
+- [x] Docker containerization
 
 **Frontend:**
-- [x] React 18 + TypeScript + Vite setup
-- [x] Material-UI integration
-- [x] Real-time search interface
-- [x] Type-safe API client
-- [x] Protein results table
-- [x] **Protein detail modal** - Click-to-view full details
-- [x] External database links (UniProt, Ensembl, NCBI)
-- [x] Error handling and loading states
-- [x] Professional, minimal UI design
-- [x] **Dockerfile + nginx for production**
+- [x] React 18 + TypeScript + Vite + Material-UI
+- [x] Real-time protein search
+- [x] Protein detail modal with external links
+- [x] **Cytoscape.js network visualization** (`/network`)
+- [x] **File upload page** with drag-and-drop (`/upload`)
+- [x] **Export network as PNG**
+- [x] Multi-page navigation (Proteins | Network | Upload)
+- [x] Docker + nginx production setup
 
 **DevOps:**
-- [x] **Docker Compose** - One-command deployment
-- [x] **Automated setup** - Migrations + data loading
-- [x] **Production-ready** - Multi-stage builds
+- [x] Docker Compose one-command deployment
+- [x] Automated migrations + data seeding
 
----
-
-### 🚧 Planned Enhancements (Next Iterations)
-
-**Frontend Features:**
-- [ ] **Network visualization** - Cytoscape.js for interaction networks
-- [ ] **Advanced filters** - Filter by organism, interaction count, etc.
-- [ ] **Sorting controls** - Sort by gene name, date, relevance
-- [ ] **Pagination UI** - Navigate through large result sets
-- [ ] **Export functionality** - Download results as CSV/JSON
-- [ ] **Dark mode toggle** - User preference for color scheme
-- [ ] **Protein comparison** - Side-by-side comparison view
-- [ ] **Recent searches** - History of user searches
-
-**Backend Features:**
-- [ ] **Interaction model** - Protein-protein interactions
-- [ ] **PSI-MI TAB parser** - Import standard interaction data format
-- [ ] **CSV upload** - Bulk protein/interaction upload
-- [ ] **User authentication** - Django auth with JWT tokens
-- [ ] **PostgreSQL migration** - Production-ready database
-- [ ] **API versioning** - v1, v2 endpoints
-- [ ] **Rate limiting** - Prevent API abuse
-- [ ] **Caching layer** - Redis for performance
-- [ ] **Full-text search** - PostgreSQL full-text or Elasticsearch
-
-**DevOps & Infrastructure:**
-- [ ] **CI/CD pipeline** - GitHub Actions for testing/deployment
-- [ ] **Unit tests** - Backend and frontend test coverage
-- [ ] **Integration tests** - End-to-end testing
-- [ ] **API documentation** - Swagger/OpenAPI spec
-- [ ] **Performance monitoring** - Logging and metrics
-- [ ] **Production deployment** - AWS/GCP/Heroku setup
+### 🚧 Planned for Full GSoC Implementation
+- [ ] UniProt API integration (auto-fetch unknown proteins on upload)
+- [ ] User authentication (Django auth + JWT)
+- [ ] PostgreSQL migration
+- [ ] Advanced filters (organism, interaction count, score threshold)
+- [ ] CI/CD pipeline (GitHub Actions)
+- [ ] API documentation (Swagger/OpenAPI)
+- [ ] Pagination UI
+- [ ] Caching layer (Redis)
 
 ---
 
