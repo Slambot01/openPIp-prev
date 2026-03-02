@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import {
   Container,
   Typography,
@@ -24,14 +25,24 @@ import {
   Chip,
   Divider,
   Link,
+  AppBar,
+  Toolbar,
+  IconButton,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import HubIcon from '@mui/icons-material/Hub';
+import BiotechIcon from '@mui/icons-material/Biotech';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { proteinApi } from './api/proteinApi';
 import type { Protein } from './api/proteinApi';
+import NetworkPage from './pages/NetworkPage';
+import UploadPage from './pages/UploadPage';
 
-function App() {
+// ─── Proteins page ────────────────────────────────────────────────────────────
+function ProteinsPage() {
+  const navigate = useNavigate();
   const [proteins, setProteins] = useState<Protein[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +54,6 @@ function App() {
     setSearchQuery(query);
     setLoading(true);
     setError(null);
-
     try {
       const data = await proteinApi.searchProteins(query);
       setProteins(data.results);
@@ -104,14 +114,8 @@ function App() {
         </CardContent>
       </Card>
 
-      {/* Error Alert */}
-      {error && (
-        <Alert severity="error" sx={{ mb: 3 }}>
-          {error}
-        </Alert>
-      )}
+      {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
 
-      {/* Loading Spinner */}
       {loading && (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
           <CircularProgress />
@@ -129,6 +133,7 @@ function App() {
                 <TableCell sx={{ fontWeight: 'bold' }}>UniProt ID</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }}>Ensembl ID</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }}>Description</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Network</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -151,12 +156,26 @@ function App() {
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{ color: '#1976d2', textDecoration: 'none' }}
+                      onClick={(e) => e.stopPropagation()}
                     >
                       {protein.uniprot_id}
                     </a>
                   </TableCell>
                   <TableCell>{protein.ensembl_id}</TableCell>
-                  <TableCell sx={{ maxWidth: 300 }}>{protein.description}</TableCell>
+                  <TableCell sx={{ maxWidth: 280 }}>{protein.description}</TableCell>
+                  <TableCell>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      startIcon={<HubIcon />}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/network?protein=${protein.gene_name}`);
+                      }}
+                    >
+                      View Network
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -186,12 +205,7 @@ function App() {
       )}
 
       {/* Protein Detail Modal */}
-      <Dialog
-        open={modalOpen}
-        onClose={handleCloseModal}
-        maxWidth="md"
-        fullWidth
-      >
+      <Dialog open={modalOpen} onClose={handleCloseModal} maxWidth="md" fullWidth>
         {selectedProtein && (
           <>
             <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -199,15 +213,9 @@ function App() {
                 <Typography variant="h5" component="span" sx={{ fontWeight: 600, color: '#2c3e50' }}>
                   {selectedProtein.gene_name}
                 </Typography>
-                <Chip
-                  label={selectedProtein.uniprot_id}
-                  size="small"
-                  sx={{ ml: 2 }}
-                />
+                <Chip label={selectedProtein.uniprot_id} size="small" sx={{ ml: 2 }} />
               </Box>
-              <Button onClick={handleCloseModal} size="small">
-                <CloseIcon />
-              </Button>
+              <Button onClick={handleCloseModal} size="small"><CloseIcon /></Button>
             </DialogTitle>
 
             <DialogContent dividers>
@@ -223,9 +231,7 @@ function App() {
               <Divider sx={{ my: 2 }} />
 
               <Box sx={{ mb: 3 }}>
-                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
-                  Identifiers
-                </Typography>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>Identifiers</Typography>
                 <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, mt: 1 }}>
                   <Box>
                     <Typography variant="caption" color="text.secondary">Gene Name</Typography>
@@ -249,38 +255,35 @@ function App() {
               <Divider sx={{ my: 2 }} />
 
               <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
-                  External Resources
-                </Typography>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>External Resources</Typography>
                 <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 1 }}>
-                  <Link
-                    href={`https://www.uniprot.org/uniprotkb/${selectedProtein.uniprot_id}/entry`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
-                  >
+                  <Link href={`https://www.uniprot.org/uniprotkb/${selectedProtein.uniprot_id}/entry`}
+                    target="_blank" rel="noopener noreferrer"
+                    sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                     UniProt <OpenInNewIcon fontSize="small" />
                   </Link>
                   {selectedProtein.ensembl_id && (
-                    <Link
-                      href={`https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=${selectedProtein.ensembl_id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
-                    >
+                    <Link href={`https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=${selectedProtein.ensembl_id}`}
+                      target="_blank" rel="noopener noreferrer"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       Ensembl <OpenInNewIcon fontSize="small" />
                     </Link>
                   )}
                   {selectedProtein.entrez_id && (
-                    <Link
-                      href={`https://www.ncbi.nlm.nih.gov/gene/${selectedProtein.entrez_id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
-                    >
+                    <Link href={`https://www.ncbi.nlm.nih.gov/gene/${selectedProtein.entrez_id}`}
+                      target="_blank" rel="noopener noreferrer"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       NCBI Gene <OpenInNewIcon fontSize="small" />
                     </Link>
                   )}
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<HubIcon />}
+                    onClick={() => { handleCloseModal(); navigate(`/network?protein=${selectedProtein.gene_name}`); }}
+                  >
+                    View Network
+                  </Button>
                 </Box>
               </Box>
 
@@ -288,21 +291,9 @@ function App() {
                 <>
                   <Divider sx={{ my: 2 }} />
                   <Box>
-                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
-                      Protein Sequence
-                    </Typography>
-                    <Paper
-                      sx={{
-                        p: 2,
-                        backgroundColor: '#f5f5f5',
-                        fontFamily: 'monospace',
-                        fontSize: '0.875rem',
-                        maxHeight: 200,
-                        overflow: 'auto',
-                        wordBreak: 'break-all'
-                      }}
-                    >
-                      {selectedProtein.sequence || 'No sequence data available'}
+                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>Protein Sequence</Typography>
+                    <Paper sx={{ p: 2, backgroundColor: '#f5f5f5', fontFamily: 'monospace', fontSize: '0.875rem', maxHeight: 200, overflow: 'auto', wordBreak: 'break-all' }}>
+                      {selectedProtein.sequence}
                     </Paper>
                   </Box>
                 </>
@@ -310,14 +301,62 @@ function App() {
             </DialogContent>
 
             <DialogActions sx={{ p: 2 }}>
-              <Button onClick={handleCloseModal} variant="contained">
-                Close
-              </Button>
+              <Button onClick={handleCloseModal} variant="contained">Close</Button>
             </DialogActions>
           </>
         )}
       </Dialog>
     </Container>
+  );
+}
+
+// ─── Main App with Nav ────────────────────────────────────────────────────────
+function App() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const navItems = [
+    { label: 'Proteins', path: '/', icon: <BiotechIcon /> },
+    { label: 'Network', path: '/network', icon: <HubIcon /> },
+    { label: 'Upload', path: '/upload', icon: <UploadFileIcon /> },
+  ];
+
+  return (
+    <>
+      <AppBar position="static" sx={{ backgroundColor: '#2c3e50' }}>
+        <Toolbar>
+          <Typography variant="h6" sx={{ fontWeight: 700, mr: 4, letterSpacing: 1 }}>
+            openPIP 2.0
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            {navItems.map((item) => (
+              <Button
+                key={item.path}
+                startIcon={item.icon}
+                onClick={() => navigate(item.path)}
+                sx={{
+                  color: location.pathname === item.path ? '#90caf9' : 'white',
+                  fontWeight: location.pathname === item.path ? 700 : 400,
+                  borderBottom: location.pathname === item.path ? '2px solid #90caf9' : 'none',
+                  borderRadius: 0,
+                  px: 2,
+                }}
+              >
+                {item.label}
+              </Button>
+            ))}
+          </Box>
+          <Box sx={{ flexGrow: 1 }} />
+          <Chip label="GSoC 2026 POC" size="small" sx={{ color: '#90caf9', borderColor: '#90caf9' }} variant="outlined" />
+        </Toolbar>
+      </AppBar>
+
+      <Routes>
+        <Route path="/" element={<ProteinsPage />} />
+        <Route path="/network" element={<NetworkPage />} />
+        <Route path="/upload" element={<UploadPage />} />
+      </Routes>
+    </>
   );
 }
 

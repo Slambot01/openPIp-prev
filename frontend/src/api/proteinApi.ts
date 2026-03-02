@@ -22,8 +22,29 @@ export interface ProteinListResponse {
   results: Protein[];
 }
 
+export interface Interaction {
+  id: number;
+  protein_a: Protein;
+  protein_b: Protein;
+  score: number;
+  interaction_type: string;
+  dataset: string;
+  created_at: string;
+}
+
+export interface InteractionListResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Interaction[];
+}
+
+export interface UploadResponse {
+  success_rows: number;
+  errors: { row: number; message: string }[];
+}
+
 export const proteinApi = {
-  // Search proteins
   searchProteins: async (query: string = ''): Promise<ProteinListResponse> => {
     const response = await axios.get<ProteinListResponse>(`${API_BASE_URL}/proteins/`, {
       params: { search: query },
@@ -31,9 +52,25 @@ export const proteinApi = {
     return response.data;
   },
 
-  // Get single protein
   getProtein: async (id: number): Promise<Protein> => {
     const response = await axios.get<Protein>(`${API_BASE_URL}/proteins/${id}/`);
     return response.data;
   },
+
+  fetchInteractions: async (protein: string): Promise<Interaction[]> => {
+    const response = await axios.get<InteractionListResponse>(`${API_BASE_URL}/interactions/`, {
+      params: { protein },
+    });
+    return response.data.results;
+  },
+
+  uploadFile: async (file: File): Promise<UploadResponse> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await axios.post<UploadResponse>(`${API_BASE_URL}/upload/`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  },
 };
+
