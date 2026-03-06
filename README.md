@@ -38,10 +38,10 @@ This is a proof-of-concept for **openPIP 2.0**, a complete modernization of the 
 - **Real-time Search**: Instant protein search as you type
 - **Interactive Detail View**: Click any protein row to see full details in a modal
 - **External Links**: Direct links to UniProt, Ensembl, and NCBI databases
-- **🕸️ Network Visualization**: Cytoscape.js interactive graph — search a protein to see its PPI network
+- **Network Visualization**: Cytoscape.js interactive graph — search a protein to see its PPI network
 - **Layout Toggle**: Switch between CoSE and Circle graph layouts
-- **📤 File Upload**: Drag-and-drop CSV/TSV upload with row-by-row validation and error reporting
-- **📥 Export PNG**: Download the network graph as a high-resolution PNG image
+- **File Upload**: Drag-and-drop CSV/TSV upload with row-by-row validation and error reporting
+- **Export PNG**: Download the network graph as a high-resolution PNG image
 - **Navigation**: Multi-page app with Proteins | Network | Upload nav bar
 - **TypeScript**: Full type safety for better code quality
 - **Error Handling**: Graceful error states and loading indicators
@@ -332,13 +332,6 @@ Load with: `python manage.py load_sample_proteins`
 - Built for: GSoC 2026 - openPIP 2.0 Rewrite
 
 ---
-
-## 📄 License
-
-This project is part of the openPIP ecosystem. See the main [openPIP repository](https://github.com/BaderLab/openPIP) for license information.
-
----
-
 ## 🙏 Acknowledgments
 
 - Original openPIP team at BaderLab
@@ -346,6 +339,7 @@ This project is part of the openPIP ecosystem. See the main [openPIP repository]
 - GSoC Program
 
 ---
+
 
 
 
