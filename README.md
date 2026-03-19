@@ -380,47 +380,7 @@ Load with: `python manage.py load_sample_proteins`
 
 ---
 
-## 🔮 Roadmap
-
-### ✅ Completed (POC)
-
-**Backend:**
-- [x] Django 6.0.2 + REST Framework setup
-- [x] Protein + Interaction data models
-- [x] RESTful API with CRUD + interaction filtering
-- [x] File upload endpoint (CSV + PSI-MI TAB via pandas)
-- [x] Multi-field search
-- [x] Django admin for proteins and interactions
-- [x] Sample data: 7 proteins + 10 PPI pairs
-- [x] Docker containerization
-
-**Frontend:**
-- [x] React 18 + TypeScript + Vite + Material-UI
-- [x] Real-time protein search
-- [x] Protein detail modal with external links
-- [x] **Cytoscape.js network visualization** (`/network`)
-- [x] **File upload page** with drag-and-drop (`/upload`)
-- [x] **Export network as PNG**
-- [x] Multi-page navigation (Proteins | Network | Upload)
-- [x] Docker + nginx production setup
-
-**DevOps:**
-- [x] Docker Compose one-command deployment
-- [x] Automated migrations + data seeding
-
-### 🚧 Planned for Full GSoC Implementation
-- [ ] UniProt API integration (auto-fetch unknown proteins on upload)
-- [ ] User authentication (Django auth + JWT)
-- [ ] PostgreSQL migration
-- [ ] Advanced filters (organism, interaction count, score threshold)
-- [ ] CI/CD pipeline (GitHub Actions)
-- [ ] API documentation (Swagger/OpenAPI)
-- [ ] Pagination UI
-- [ ] Caching layer (Redis)
-
----
-
-## 👨‍💻 Author
+## ‍💻 Author
 
 **Ritesh Pandit**
 - GitHub: [@Slambot01](https://github.com/Slambot01)
