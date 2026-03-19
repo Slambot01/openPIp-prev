@@ -7,7 +7,7 @@
 [![Django](https://img.shields.io/badge/Django-6.0.2-green.svg)](https://www.djangoproject.com/)
 [![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
-[![Material-UI](https://img.shields.io/badge/Material--UI-7.0-blue.svg)](https://mui.com/)
+[![Material-UI](https://img.shields.io/badge/Material--UI-7.3-blue.svg)](https://mui.com/)
 
 ---
 
@@ -80,8 +80,8 @@ The full proposal is available at: [RITESH ADD PROPOSAL LINK IF AVAILABLE]
 |-------|------------|
 | Backend | Django 6.0.2 + Django REST Framework 3.16 |
 | Frontend | React 18 + TypeScript 5.9 + Vite 7.3 |
-| UI | Material-UI 7.0 |
-| Graph | Cytoscape.js |
+| UI | Material-UI 7.3 |
+| Graph | Cytoscape.js 3.33 |
 | Upload | react-dropzone + pandas |
 | Routing | react-router-dom |
 | Database | SQLite (upgradable to PostgreSQL) |
@@ -380,7 +380,7 @@ Load with: `python manage.py load_sample_proteins`
 
 ---
 
-## ‍💻 Author
+## 👨‍💻 Author
 
 **Ritesh Pandit**
 - GitHub: [@Slambot01](https://github.com/Slambot01)
