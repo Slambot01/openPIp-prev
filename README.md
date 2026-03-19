@@ -15,7 +15,7 @@
 
 This is a working proof-of-concept built as pre-proposal work for my GSoC 2026 application to NRNB's **openPIP 2.0 Rewrite** project.
 
-The original openPIP is a PHP 5.6 / Symfony 2.8 platform (both end-of-life since 2019) that currently serves 11,600 proteins and 76,563 interactions — but its `/search` page throws a 500 Internal Server Error right now due to a Symfony session management bug. This POC demonstrates what a modern rewrite looks like.
+The original openPIP is a PHP 5.6 / Symfony 2.8 platform (both end-of-life since 2019) that currently serves 11,600 proteins and 76,563 interactions - but its `/search` page throws a 500 Internal Server Error right now due to a Symfony session management bug. This POC demonstrates what a modern rewrite looks like.
 
 **What works in this POC:**
 - Django REST API with protein search and PPI filtering
@@ -41,7 +41,7 @@ The full proposal is available at: [RITESH ADD PROPOSAL LINK IF AVAILABLE]
 - **Protein Data Model**: Gene names, UniProt IDs, Ensembl IDs, Entrez IDs, descriptions, sequences
 - **Interaction Model**: Protein-protein interactions with score, type (physical/genetic/regulatory), and dataset
 - **REST API**: Full CRUD for proteins, read-only interactions API with `?protein=` filter
-- **File Upload API**: `POST /api/upload/` — parses CSV and PSI-MI TAB (TSV) files via pandas
+- **File Upload API**: `POST /api/upload/` - parses CSV and PSI-MI TAB (TSV) files via pandas
 - **Search Functionality**: Multi-field search across protein attributes
 - **Admin Panel**: Django admin for proteins and interactions
 - **CORS Enabled**: Ready for frontend integration
@@ -50,7 +50,7 @@ The full proposal is available at: [RITESH ADD PROPOSAL LINK IF AVAILABLE]
 - **Real-time Search**: Instant protein search as you type
 - **Interactive Detail View**: Click any protein row to see full details in a modal
 - **External Links**: Direct links to UniProt, Ensembl, and NCBI databases
-- **Network Visualization**: Cytoscape.js interactive graph — search a protein to see its PPI network
+- **Network Visualization**: Cytoscape.js interactive graph - search a protein to see its PPI network
 - **Layout Toggle**: Switch between CoSE and Circle graph layouts
 - **File Upload**: Drag-and-drop CSV/TSV upload with row-by-row validation and error reporting
 - **Export PNG**: Download the network graph as a high-resolution PNG image
@@ -237,11 +237,11 @@ openpip-2.0-preview/
 
 This POC was built to validate technical feasibility before writing the proposal. Key things I learned building it:
 
-1. **Cytoscape.js inside React** requires stable callback refs with `useRef` to prevent stale closures — the container div ref must be stable across renders or the graph initializes on a detached DOM node. This solution is built into the production architecture.
+1. **Cytoscape.js inside React** requires stable callback refs with `useRef` to prevent stale closures - the container div ref must be stable across renders or the graph initializes on a detached DOM node. This solution is built into the production architecture.
 
-2. **PSI-MI TAB parsing** is more complex than it looks — column 5 (interaction detection method) uses PSI-MI controlled vocabulary terms like `psi-mi:"MI:0018"(two hybrid)` that need to be parsed and normalized separately from the display name.
+2. **PSI-MI TAB parsing** is more complex than it looks - column 5 (interaction detection method) uses PSI-MI controlled vocabulary terms like `psi-mi:"MI:0018"(two hybrid)` that need to be parsed and normalized separately from the display name.
 
-3. **Docker on Windows** has file-watching and volume mount issues with Vite's dev server — solved by setting `CHOKIDAR_USEPOLLING=true` in the frontend container environment.
+3. **Docker on Windows** has file-watching and volume mount issues with Vite's dev server - solved by setting `CHOKIDAR_USEPOLLING=true` in the frontend container environment.
 
 These aren't things you learn from reading documentation. They came from actually building and debugging the system.
 
@@ -277,7 +277,7 @@ These aren't things you learn from reading documentation. They came from actuall
 ### 🚧 Full GSoC 2026 Implementation Will Add
 
 **Data Model (Major Redesign):**
-- Organism-agnostic data model — separate Organism, Molecule, and MoleculeIdentifier tables
+- Organism-agnostic data model - separate Organism, Molecule, and MoleculeIdentifier tables
 - PostgreSQL with JSONB metadata fields for organism-specific data (tissue expression for human, localization for yeast, strain info for viral proteins)
 - Cross-species interaction support with is_cross_species auto-computed flag
 - MoleculeIdentifier table for cross-reference resolution (same protein appearing as "P04637" or "TP53" resolves to one record)
@@ -305,7 +305,7 @@ These aren't things you learn from reading documentation. They came from actuall
 - Rate limiting and pagination
 
 **Admin Panel (New):**
-- Feature toggle system — on/off switches for:
+- Feature toggle system - on/off switches for:
   * Tissue expression filter
   * Each external tool link individually  
   * Confidence score display
@@ -317,7 +317,7 @@ These aren't things you learn from reading documentation. They came from actuall
 - Branding customization (colors, titles, logo)
 
 **Visualization (Enhancement):**
-- Host-pathogen coloring — host proteins in blue, pathogen proteins in red, cross-species edges dashed
+- Host-pathogen coloring - host proteins in blue, pathogen proteins in red, cross-species edges dashed
 - Confidence-weighted edges (thickness + opacity)
 - All 5 Cytoscape.js layouts from original openPIP (CoLa, CoSE, concentric, circle, grid)
 - Node popup: protein function, UniProt/Ensembl IDs, sequence link
