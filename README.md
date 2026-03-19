@@ -31,7 +31,7 @@ The original openPIP is a PHP 5.6 / Symfony 2.8 platform (both end-of-life since
 - REST API with OpenAPI documentation
 - PostgreSQL with pg_trgm fuzzy search
 
-The full proposal is available at: [RITESH ADD PROPOSAL LINK IF AVAILABLE]
+
 
 ---
 
