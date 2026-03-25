@@ -1,7 +1,7 @@
 from rest_framework import viewsets, filters, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.db.models import Q
+from django.db.models import Q, Case, When, IntegerField, Value
 from .models import Protein, Interaction
 from .serializers import ProteinSerializer, InteractionSerializer
 
@@ -10,13 +10,29 @@ class ProteinViewSet(viewsets.ModelViewSet):
     """
     API endpoint for proteins.
     Supports searching by gene_name, protein_name, uniprot_id, or description.
+    Results are ranked: exact gene name match first, then starts-with, then others.
     """
-    queryset = Protein.objects.all()
+    queryset = Protein.objects.none()
     serializer_class = ProteinSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter]
     search_fields = ['gene_name', 'protein_name', 'uniprot_id', 'description']
-    ordering_fields = ['gene_name', 'created_at']
-    ordering = ['gene_name']
+
+    def get_queryset(self):
+        queryset = Protein.objects.all()
+        search = self.request.query_params.get('search', '').strip()
+        if search:
+            queryset = queryset.annotate(
+                relevance=Case(
+                    When(gene_name__iexact=search, then=Value(0)),
+                    When(gene_name__istartswith=search, then=Value(1)),
+                    When(uniprot_id__iexact=search, then=Value(2)),
+                    default=Value(3),
+                    output_field=IntegerField(),
+                )
+            ).order_by('relevance', 'gene_name')
+        else:
+            queryset = queryset.order_by('gene_name')
+        return queryset
 
 
 class InteractionViewSet(viewsets.ReadOnlyModelViewSet):

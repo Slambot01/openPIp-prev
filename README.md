@@ -63,11 +63,11 @@ The original openPIP served thousands of proteins and interactions but was built
 ## 📸 Screenshots
 
 ### Search Interface
-<img width="1917" height="871" alt="image" src="https://github.com/user-attachments/assets/53da13a8-6f23-4bdf-99e9-a8cdbfad0652" />
-<img width="1898" height="868" alt="image" src="https://github.com/user-attachments/assets/106ac11a-808c-4991-81e8-2883ea78b0a6" />
-<img width="1915" height="870" alt="image" src="https://github.com/user-attachments/assets/d79aaccf-2259-474b-9d7a-f98592ae3ae6" />
-<img width="1899" height="875" alt="image" src="https://github.com/user-attachments/assets/4333c925-b352-454b-b0dd-b5723bc9f14d" />
-<img width="1914" height="864" alt="image" src="https://github.com/user-attachments/assets/06644a78-fb3d-468a-839f-7e03dde7c5de" />
+<img width="1917" alt="Search Interface" src="docs/images/1.png" />
+<img width="1898" alt="Protein Details" src="docs/images/2.png" />
+<img width="1915" alt="Network Visualization" src="docs/images/3.png" />
+<img width="1899" alt="Upload Page" src="docs/images/4.png" />
+<img width="1914" alt="Results View" src="docs/images/5.png" />
 
 
 ---
