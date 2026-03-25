@@ -86,7 +86,7 @@ function ProteinsPage() {
           Modern Protein Interaction Platform
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Django + React + TypeScript • GSoC 2026 Proof of Concept
+          Django + React + TypeScript
         </Typography>
       </Box>
 
@@ -347,7 +347,7 @@ function App() {
             ))}
           </Box>
           <Box sx={{ flexGrow: 1 }} />
-          <Chip label="GSoC 2026 POC" size="small" sx={{ color: '#90caf9', borderColor: '#90caf9' }} variant="outlined" />
+
         </Toolbar>
       </AppBar>
 
