@@ -1,8 +1,8 @@
-# openPIP 2.0 Preview
+# openPIP 2.0
 
-**A Modern Protein Interaction Platform - GSoC 2026 Proof of Concept**
+**A Modern Protein Interaction Platform**
 
-> Complete rewrite of openPIP using Django, React, and Docker - demonstrating a modern tech stack for protein interaction data management.
+> A complete rewrite of openPIP using Django, React, and Docker — bringing a modern tech stack to protein interaction data management.
 
 [![Django](https://img.shields.io/badge/Django-6.0.2-green.svg)](https://www.djangoproject.com/)
 [![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
@@ -13,19 +13,19 @@
 
 ## 🎯 What This Is
 
-This is a working proof-of-concept built as pre-proposal work for my GSoC 2026 application to NRNB's **openPIP 2.0 Rewrite** project.
+openPIP 2.0 is a modern, open-source platform for exploring and managing protein-protein interaction (PPI) data. It replaces an aging PHP/Symfony stack with a clean Django REST backend and a React/TypeScript frontend, making the system easier to maintain, extend, and deploy.
 
-The original openPIP is a PHP 5.6 / Symfony 2.8 platform (both end-of-life since 2019) that currently serves 11,600 proteins and 76,563 interactions - but its `/search` page throws a 500 Internal Server Error right now due to a Symfony session management bug. This POC demonstrates what a modern rewrite looks like.
+The original openPIP served thousands of proteins and interactions but was built on technologies that have been end-of-life since 2019. This rewrite modernizes the entire stack while preserving and improving the core functionality.
 
-**What works in this POC:**
+**What works in this version:**
 - Django REST API with protein search and PPI filtering
 - PSI-MI TAB and CSV file upload with row-by-row validation
 - Cytoscape.js network visualization with layout switching
 - Docker Compose one-command deployment
 
-**What the full GSoC project adds:**
+**Planned additions:**
 - Organism-agnostic data model (JSONB metadata, cross-species interaction support)
-- Three search modes matching original openPIP behavior
+- Three search modes (network, between, direct)
 - Full PSI-MI TAB 2.7 + 2.8 + CSV parser pipeline
 - Admin feature toggle system
 - REST API with OpenAPI documentation
@@ -233,19 +233,17 @@ openpip-2.0-preview/
 
 ---
 
-## 🎓 GSoC 2026 Context
+## ✅ What's Implemented
 
-This POC was built to validate technical feasibility before writing the proposal. Key things I learned building it:
+Key technical notes from building this:
 
-1. **Cytoscape.js inside React** requires stable callback refs with `useRef` to prevent stale closures - the container div ref must be stable across renders or the graph initializes on a detached DOM node. This solution is built into the production architecture.
+1. **Cytoscape.js inside React** requires stable callback refs with `useRef` to prevent stale closures — the container div ref must be stable across renders or the graph initializes on a detached DOM node.
 
-2. **PSI-MI TAB parsing** is more complex than it looks - column 5 (interaction detection method) uses PSI-MI controlled vocabulary terms like `psi-mi:"MI:0018"(two hybrid)` that need to be parsed and normalized separately from the display name.
+2. **PSI-MI TAB parsing** is more complex than it looks — column 5 (interaction detection method) uses PSI-MI controlled vocabulary terms like `psi-mi:"MI:0018"(two hybrid)` that need to be parsed and normalized separately from the display name.
 
-3. **Docker on Windows** has file-watching and volume mount issues with Vite's dev server - solved by setting `CHOKIDAR_USEPOLLING=true` in the frontend container environment.
+3. **Docker on Windows** has file-watching and volume mount issues with Vite's dev server — solved by setting `CHOKIDAR_USEPOLLING=true` in the frontend container environment.
 
-These aren't things you learn from reading documentation. They came from actually building and debugging the system.
-
-### ✅ Completed in this POC
+### Completed Features
 
 **Backend:**
 - Django + Django REST Framework setup
@@ -274,7 +272,7 @@ These aren't things you learn from reading documentation. They came from actuall
 
 ---
 
-### 🚧 Full GSoC 2026 Implementation Will Add
+### 🚧 Planned Features
 
 **Data Model (Major Redesign):**
 - Organism-agnostic data model - separate Organism, Molecule, and MoleculeIdentifier tables
@@ -384,14 +382,12 @@ Load with: `python manage.py load_sample_proteins`
 
 **Ritesh Pandit**
 - GitHub: [@Slambot01](https://github.com/Slambot01)
-- Built for: GSoC 2026 - openPIP 2.0 Rewrite
 
 ---
 ## 🙏 Acknowledgments
 
-- Original openPIP team at BaderLab
-- NRNB (National Resource for Network Biology)
-- GSoC Program
+- Original openPIP development team
+- The open-source bioinformatics community
 
 ---
 
